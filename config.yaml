@@ -1,0 +1,55 @@
+# This is project name
+project name: 'd-gnn-auto-pipeline'
+wandb_entity: ''
+
+# Input file (This variable contains the actual data entry that will have columns described in the README.md
+data_file: 'data/classification_toy.csv'
+
+# Structures location (the directory where all the structures are stored)
+structure_location: ''
+
+# Data file
+
+# Problem (Options: regression, classification). classification variable accomodates multi-bin classification as well as binary.
+problem_type: classification
+
+#Node features. Options are: kidera or OHE
+node_features: 'Kidera'
+
+# Model configuration and Sweeping
+parameters:
+  # Notes: - All available gpus (torch.cuda.device_count()) will be used.
+  Layers:
+    distribution: constant 
+    value: "H-100-100-100"
+
+  # Format is super important here. The Adjacency type is seperated from the cutoff threshold by '_'. eg..  if you want an alpha shape 5 then use 'DT_5.0'
+  Adjacency:
+    distribution: categorical
+    values:
+    - 'DT_5.0'
+
+  lr:
+    distribution: constant
+    value: 0.0001
+
+  # Seeds shouldn't exceed 5 digits
+  seed:
+    values: [336,13,42]
+
+  train_batchsize:
+    distribution: constant
+    value: 64
+  
+  test_batchsize:
+    distribution: constant
+    value: 32
+
+  # Early stopping  patience is  10% of the epoch.
+  epochs:
+    distribution: constant
+    value: 500
+  
+  logger:
+    distribution: constant
+    value: "wandb"
